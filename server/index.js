@@ -27,14 +27,31 @@ app.get("/books", (req, res) => {
 });
 
 app.post("/books", (req, res) => {
-  const sql = "INSERT INTO books(`title`, `desc`, `cover`) VALUES (?)";
-  const values = [req.body.title, req.body.title, req.body.cover];
+  const sql = "INSERT INTO books(`title`, `desc`,'price', `cover`) VALUES (?)";
+  const values = [
+    req.body.title,
+    req.body.desc,
+    req.body.price,
+    req.body.cover,
+  ];
 
   db.query(sql, [values], (err, data) => {
     if (err) return res.json(err);
     return res.json(data);
   });
 });
+
+app.delete("/books/:id", (req, res) => {
+  const bookId = req.params.id;
+  const sql = "DELETE FROM books WHERE id = ?";
+
+  db.query(sql, [bookId], (err, data) => {
+    if (err) return res.json(err);
+    return res.json("Book has been deleted");
+  });
+});
+
+app.put("/books/:id", (req, res) => {});
 
 app.listen(8800, () => {
   console.log("Connected to Backend!");
